@@ -16,8 +16,8 @@ router.post("/login", async (req, res) => {
     const user = await login(email, password);
     res.status(200).send(user);
   } catch (error) {
-    console.log("error");
-    res.status(400).send({ message: "Unknows error" });
+    console.log(error);
+    res.status(400).send({ message: error.message });
   }
 });
 
@@ -30,7 +30,7 @@ router.post("/signup", async (req, res) => {
     const user = await signup(name, email, password);
     res.status(200).send(user);
   } catch (error) {
-    console.log("error");
+    console.log(error);
     res.status(400).send({ message: error.message });
   }
 });
