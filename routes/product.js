@@ -2,6 +2,8 @@ const express = require("express");
 // create a express router
 const router = express.Router();
 
+const { isAdmin } = require("../middleware/auth");
+
 const {
   getProducts,
   getProduct,
@@ -34,7 +36,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // add new product
-router.post("/", async (req, res) => {
+router.post("/", isAdmin, async (req, res) => {
   try {
     const name = req.body.name;
     const description = req.body.description;
@@ -49,7 +51,9 @@ router.post("/", async (req, res) => {
       });
     }
 
-    res.status(200).send(await addProduct(name, description, price, category, image));
+    res
+      .status(200)
+      .send(await addProduct(name, description, price, category, image));
   } catch (error) {
     console.log(error);
     res.status(400).send({ message: "Unknown error" });
@@ -57,7 +61,7 @@ router.post("/", async (req, res) => {
 });
 
 // update product
-router.put("/:id", async (req, res) => {
+router.put("/:id", isAdmin, async (req, res) => {
   try {
     const id = req.params.id;
     const name = req.body.name;
@@ -82,7 +86,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete product
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isAdmin, async (req, res) => {
   try {
     const id = req.params.id;
     await deleteProduct(id);

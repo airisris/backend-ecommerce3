@@ -3,9 +3,13 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
+const getUserByEmail = async (email) => {
+  return await User.findOne({ email: email });
+};
+
 const login = async (email, password) => {
   // check if the email provided is in the system
-  const user = await User.findOne({ email: email });
+  const user = await getUserByEmail(email);
   // if not exists, throw an error
   if (!user) {
     throw new Error("Invalid email or password");
@@ -40,14 +44,14 @@ const login = async (email, password) => {
 
 const signup = async (name, email, password) => {
   // check if the email provided is already exist
-  const emailExists = await User.findOne({ email: email });
+  const emailExists = await getUserByEmail(email);
   // if email exists, throw an error
   if (emailExists) {
     throw new Error(
       "Email already exists. Please use another email or login with your existing email."
     );
   }
-  
+
   // create the new user
   const newUser = new User({
     name,
@@ -83,4 +87,5 @@ const signup = async (name, email, password) => {
 module.exports = {
   login,
   signup,
+  getUserByEmail,
 };
