@@ -19,7 +19,7 @@ app.use(cors());
 async function connectToMongoDB() {
   try {
     // wait for the MangoDB to connect
-    await mongoose.connect("mongodb://localhost:27017/store");
+    await mongoose.connect(process.env.MONGODB_URL + "/store");
     console.log("MongoDB is connected");
   } catch (error) {
     console.log(error);
